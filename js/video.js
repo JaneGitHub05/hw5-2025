@@ -5,8 +5,8 @@ window.addEventListener("load", function () {
 
 document.addEventListener("DOMContentLoaded", () => {
     let video = document.querySelector(".video");
-    // when end of video reached loop back to beginning
-    video.loop = true;
+    // when end of video reached loop back to beginning - default is false
+    video.loop = false;
 
     // play
     document.querySelector("#play").addEventListener("click", function () {
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector("#slower").addEventListener("click", () => {
         console.log("Slow Down");
         console.log(`Current speed is ${video.playbackRate}`);
-        video.playbackRate = 0.5 * video.playbackRate;
+        video.playbackRate *= 0.9;
         console.log(`New speed is ${video.playbackRate}`);
     });
 
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector("#faster").addEventListener("click", () => {
         console.log("Speed Up");
         console.log(`Current speed is ${video.playbackRate}`);
-        video.playbackRate = 2 * video.playbackRate;
+        video.playbackRate /= 0.9;
         console.log(`New speed is ${video.playbackRate}`);
     })
 
@@ -41,7 +41,12 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Skip Ahead");
         console.log(`The duration is ${video.duration}s`);
         console.log(`Current time is ${video.currentTime}s`);
-        video.currentTime += 5;
+        if (video.currentTime + 10 > video.duration) {
+            video.currentTime = 0;
+        } else {
+            video.currentTime += 10;
+        }
+
         console.log(`Current time is ${video.currentTime}s`);
     })
 
@@ -50,9 +55,11 @@ document.addEventListener("DOMContentLoaded", () => {
     button.addEventListener("click", () => {
         if (video.muted) {
             video.muted = false;
+            button.textContent = "Mute";
             console.log("unmuted");
         } else {
             video.muted = true;
+            button.textContent = "Unmute";
             console.log("muted");
         }
     });
@@ -64,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
         video.volume = slider.value / 100;
         // want to DISPLAY volumne in range [0, 100]
         console.log(video.volume * 100);
-        volume.textContent = video.volume * 100;
+        volume.textContent = `${video.volume * 100}%`;
     };
 
     let old_school = document.querySelector("#vintage");
